@@ -129,7 +129,9 @@ document.addEventListener('DOMContentLoaded', function () {
     // check if there are any errors and display warrning
     function displayErrors() {
         resetBackground(nameInput, validateName());
+        toggleView(errorMessageContainer[0], !validateName());
         resetBackground(emailInput, validateEmail());
+        toggleView(errorMessageContainer[1], !validateEmail());
         toggleView(errorMessageContainer[2], !validateActivities());
         if (!FormGlobal['isCreditCardValid'] ||
             !FormGlobal['isZipCodeValid'] ||
