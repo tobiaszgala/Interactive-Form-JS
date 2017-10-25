@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', function () {
         Flexible, new options can be added pointing to the container
     */
     const paymentOptions = {
-        'credit card' : document.getElementById('credit-card'),
+        'credit card' : document.getElementById('cc'),
         'paypal'      : document.getElementById('pay-paypal'),
         'bitcoin'     : document.getElementById('pay-bitcoin')
     };
@@ -78,16 +78,14 @@ document.addEventListener('DOMContentLoaded', function () {
         
         // focus on first input field
         form.querySelector('#name').focus();
-        
         // hide other job role input element and it's label
         toggleView(otherJobRole.previousElementSibling, toggleView(otherJobRole, false));
-        
         // hide color selection and it's label for t-shirt info
         toggleView(color.previousElementSibling, toggleView(color, false));
-        
         // hide divs with payment options
         hidePaymentOptions();
-        
+        // display default option (credit card)
+        toggleView(paymentOptions['credit card'], true);
         // set novalidate attribute to prevent browser validation
         form.setAttribute('novalidate', true);
     }
@@ -101,7 +99,7 @@ document.addEventListener('DOMContentLoaded', function () {
     
     // function to display specific error message for credit card validation
     function setCreditCardErrorMessage(message) {
-        // change textContent of error div in credit-card options
+        // change textContent of error div in credit card options
         errorMessageContainer[3].textContent = message;
     }
     
@@ -272,6 +270,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
     
     form.addEventListener('submit', function(e) {
+        e.preventDefault();
         // check if name, email is valid and at least on activity is selected
          if (validateName() && validateEmail() && validateActivities()) {
             // if everything is valid check if credit card option is selected
@@ -279,22 +278,17 @@ document.addEventListener('DOMContentLoaded', function () {
                  // if credit card option is selected check if all fields are valid
                  if (FormGlobal['isCreditCardValid'] && FormGlobal['isZipCodeValid'] && FormGlobal['isCVVValid'])
                     // if all fields are valid including credit card section submit form
-                    e.submit();
-                 else
-                    // if credit card information are invalid prevent default
-                    e.preventDefault();
+                    e.target.submit();
              } else
                 /*
                     if name, email and number of activities is valid 
                     but no credit card payment option is selected 
                     submit form
                 */
-                 e.submit();
-         } else
-            // if name, email or at least on actvity is not selected then prevent default
-            e.preventDefault();
+                 e.target.submit();
+         }
     });
     
-    // init
+    // on page load
     initForm();
 });

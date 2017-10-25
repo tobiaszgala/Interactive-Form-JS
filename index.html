@@ -38,7 +38,7 @@
           <option value="other">Other</option>  
         </select>
         <label for="other-title">Other:</label>
-        <input type="text" id="other-title" name="user_title_other">
+        <input type="text" id="other-title" placeholder="Your Job Role">
       </fieldset>
       
       <fieldset class="shirt">
@@ -94,12 +94,11 @@
         <label for="payment">I'm going to pay with:</label>
         <select id="payment" name="user_payment">
           <option value="select_method">Select Payment Method</option>
-          <option value="credit card">Credit Card</option>
+          <option value="credit card" selected>Credit Card</option>
           <option value="paypal">PayPal</option>
           <option value="bitcoin">Bitcoin</option>
         </select>
 
-        <div id="credit-card" class="credit-card">
           <div class="error-message">Please provide all credit card information</div>
           <div class="col-6 col">
             <label for="cc-num">Card Number:</label>
