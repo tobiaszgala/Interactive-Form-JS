@@ -19,6 +19,8 @@ document.addEventListener('DOMContentLoaded', function () {
     const activities = document.getElementsByClassName('activities')[0];
     // select element with payment options
     const payment = document.getElementById('payment');
+    // get all input fields for credit card
+    const ccInputs = document.querySelectorAll('#cc input[type="text"]');
     // selecting all error message divs
     const errorMessageContainer = document.getElementsByClassName('error-message');
     // create h2 element to hold price for activities
@@ -76,14 +78,16 @@ document.addEventListener('DOMContentLoaded', function () {
         priceTag.textContent = 'Price: 0';
         activities.appendChild(priceTag);
         
-        // focus on first input field
-        form.querySelector('#name').focus();
         // hide other job role input element and it's label
         toggleView(otherJobRole.previousElementSibling, toggleView(otherJobRole, false));
         // hide color selection and it's label for t-shirt info
         toggleView(color.previousElementSibling, toggleView(color, false));
         // hide divs with payment options
         hidePaymentOptions();
+        // hide all error messages
+        hideErrors();
+        // focus on first input field
+        form.querySelector('#name').focus();
         // display default option (credit card)
         toggleView(paymentOptions['credit card'], true);
         // set novalidate attribute to prevent browser validation
@@ -108,6 +112,36 @@ document.addEventListener('DOMContentLoaded', function () {
         // loop through paymentOptions object and set display to none
         for (prop in paymentOptions)
             toggleView(paymentOptions[prop], false);
+    }
+    
+    // function hides all error messages
+    function hideErrors() {
+        for (let i = 0; i < errorMessageContainer.length; i++) {
+            errorMessageContainer[i].style.display = 'none';
+        }
+    }
+    
+    // set or reset background of input fields
+    function resetBackground(element, bool) {
+        bool ? element.style.backgroundColor = '' : element.style.backgroundColor = '#FFD2D2';
+    }
+    
+    // check if there are any errors and display warrning
+    function displayErrors() {
+        resetBackground(nameInput, validateName());
+        resetBackground(emailInput, validateEmail());
+        toggleView(errorMessageContainer[2], !validateActivities());
+        if (!FormGlobal['isCreditCardValid'] ||
+            !FormGlobal['isZipCodeValid'] ||
+            !FormGlobal['isCVVValid']) 
+        {
+            toggleView(errorMessageContainer[3], true);
+            setCreditCardErrorMessage("Please correct you credit card information");
+            resetBackground(ccInputs[0], FormGlobal['isCreditCardValid']);
+            resetBackground(ccInputs[1], FormGlobal['isZipCodeValid']);
+            resetBackground(ccInputs[2], FormGlobal['isCVVValid']);
+        }
+        
     }
     
     // function validates activities and hide those which cannot be taken in the same time
@@ -198,9 +232,21 @@ document.addEventListener('DOMContentLoaded', function () {
     nameInput.addEventListener('input', function(e) {
         // show or hide error message if name is empty or not
         toggleView(errorMessageContainer[0], !validateName());
+        resetBackground(nameInput, validateName());
+    });
+    
+    nameInput.addEventListener('focus', function(e) {
+        // show or hide error message if name is empty or not
+        toggleView(errorMessageContainer[0], !validateName());
     });
     
     emailInput.addEventListener('input', function(e) {
+        // show or hide error message if email is valid or not
+        toggleView(errorMessageContainer[1], !validateEmail());
+        resetBackground(emailInput, validateEmail());
+    });
+    
+    emailInput.addEventListener('focus', function(e) {
         // show or hide error message if email is valid or not
         toggleView(errorMessageContainer[1], !validateEmail());
     });
@@ -266,11 +312,15 @@ document.addEventListener('DOMContentLoaded', function () {
     paymentOptions['credit card'].addEventListener('input', function(e) {
         // hide/show error message
         toggleView(errorMessageContainer[3], !validateCreditCardInputs(e.target.value, e.target.name));
+        resetBackground(e.target, validateCreditCardInputs(e.target.value, e.target.name));
         
     });
     
+    
     form.addEventListener('submit', function(e) {
         e.preventDefault();
+        // display if there are any errors
+        displayErrors();
         // check if name, email is valid and at least on activity is selected
          if (validateName() && validateEmail() && validateActivities()) {
             // if everything is valid check if credit card option is selected
