@@ -75,7 +75,7 @@ document.addEventListener('DOMContentLoaded', function () {
     function initForm() {
         // modify priceTag properties
         priceTag.id = 'price-tag';
-        priceTag.textContent = 'Price: 0';
+        priceTag.textContent = 'Price: $0';
         activities.appendChild(priceTag);
         
         // hide other job role input element and it's label
@@ -281,7 +281,7 @@ document.addEventListener('DOMContentLoaded', function () {
         // if object is checked = add price else adjust price
         FormGlobal['activitiesPrice'] += e.target.checked ? targetObj.price : -targetObj.price;
         // display price
-        priceTag.textContent = 'Price: ' + FormGlobal['activitiesPrice'];
+        priceTag.textContent = 'Price: $' + FormGlobal['activitiesPrice'];
         // check if there are other activities within the same time
         compareActivity(targetObj);
         // display error if nothing is selected
