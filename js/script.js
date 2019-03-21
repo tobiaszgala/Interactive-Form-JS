@@ -308,13 +308,17 @@ document.addEventListener('DOMContentLoaded', function () {
             hide/show error message
             Note: This validation helps us when we come back from different field
         */
-        toggleView(errorMessageContainer[3], !validateCreditCardInputs(e.target.value, e.target.name));
+        if (e.target.name === 'user_cc-num' || e.target.name === 'user_zip' || e.target.name === 'user_cvv') {
+            toggleView(errorMessageContainer[3], !validateCreditCardInputs(e.target.value, e.target.name));
+        }
     });
     
     paymentOptions['credit card'].addEventListener('input', function(e) {
         // hide/show error message
-        toggleView(errorMessageContainer[3], !validateCreditCardInputs(e.target.value, e.target.name));
-        resetBackground(e.target, validateCreditCardInputs(e.target.value, e.target.name));
+        if (e.target.name === 'user_cc-num' || e.target.name === 'user_zip' || e.target.name === 'user_cvv') {
+            toggleView(errorMessageContainer[3], !validateCreditCardInputs(e.target.value, e.target.name));
+            resetBackground(e.target, validateCreditCardInputs(e.target.value, e.target.name));
+        }
         
     });
     
